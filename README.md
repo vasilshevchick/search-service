@@ -16,5 +16,5 @@ Search shell commands example
 ### `help search`
 ### `search --tokens data`
 
-Time spent 5h
+Time spent 6h
 
