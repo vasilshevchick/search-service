@@ -19,3 +19,4 @@ HELP.md
 .mvn
 spring-shell.log
 *target/
+**/target/

@@ -1,6 +1,8 @@
 package com.test.client.command;
 
 import com.test.client.client.SearchClient;
+import com.test.client.client.exception.NotFoundException;
+import com.test.client.client.model.Document;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,29 +23,43 @@ public class DocumentCommandTest {
   private DocumentCommand command;
 
   @Test
-  public void put() {
+  public void shouldPut() {
     //GIVEN
     String key = "key";
     String data = "data";
-    when(client.put(key, data)).thenReturn("Some Put Result");
 
     //WHEN
     String actual = command.put(key, data);
 
     //THEN
-    assertThat(actual, is("Some Put Result"));
+    assertThat(actual, is("Success:"));
   }
 
   @Test
-  public void get() {
+  public void shouldGet() {
     //GIVEN
     String key = "key";
-    when(client.get(key)).thenReturn("Some Get Result");
+    String data = "Some Get Result";
+    Document document = new Document(key, data);
+    when(client.get(key)).thenReturn(document);
 
     //WHEN
     String actual = command.get(key);
 
     //THEN
-    assertThat(actual, is("Some Get Result"));
+    assertThat(actual, is("Success: " + document.toString()));
+  }
+
+  @Test
+  public void shouldHandleNotFoundErrorOnGet() {
+    //GIVEN
+    String key = "key";
+    when(client.get(key)).thenThrow(new NotFoundException());
+
+    //WHEN
+    String actual = command.get(key);
+
+    //THEN
+    assertThat(actual, is("Document not found"));
   }
 }
